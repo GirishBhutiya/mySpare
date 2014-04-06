@@ -15,5 +15,4 @@ public class BrowseFragment extends Fragment{
 		getActivity().setTitle("Browse");
 		return rootView;
 	}
-
 }
