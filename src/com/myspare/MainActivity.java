@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,10 +20,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.os.Build;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener{
 	 
     private String[] mSliderItems;
     private DrawerLayout mDrawerLayout;
@@ -30,19 +33,36 @@ public class MainActivity extends ActionBarActivity {
     private CharSequence mTitle;
     private ActionBarDrawerToggle mDrawerToggle;
     private LayoutInflater layoutInflator;
- 
+    Spinner spinnerDomainSelection;
+    TextView tvDrawerTitle;
+    private View viewCloseDrawer,viewOpenDrawer;
+    int currentDomainSpinnerPosition = 0;
+    String strHostUrl = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
  
-        mTitle = "test";
+        mTitle = "Browse";
  
         mSliderItems = getResources().getStringArray(R.array.sliderItem);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         layoutInflator = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         // Set the adapter for the list view
+       
+        //intilize view which set in actionbar when drawer is closed
+        viewCloseDrawer = layoutInflator.inflate(R.layout.view_drawer_close, null);
+        tvDrawerTitle = (TextView)viewCloseDrawer.findViewById(R.id.viewdrawer_close_tvtitle);
+        tvDrawerTitle.setText(mTitle);
+        
+        //intilize view which set in actionbar when drawer is open
+        viewOpenDrawer = layoutInflator.inflate(R.layout.view_drawer_open, null);
+        spinnerDomainSelection = (Spinner)viewOpenDrawer.findViewById(R.id.viewdrawer_open_spinner);
+        spinnerDomainSelection.setOnItemSelectedListener(MainActivity.this);
+        
+        
+        
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
                 R.layout.drawer_list_item, mSliderItems));
         // Set the list's click listener
@@ -58,17 +78,18 @@ public class MainActivity extends ActionBarActivity {
  
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
-                getSupportActionBar().setTitle(mTitle);
-                //getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
-                getSupportActionBar().setDisplayOptions( ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_TITLE);
+                //getSupportActionBar().setTitle(mTitle);
+                                
+                getSupportActionBar().setCustomView(viewCloseDrawer);
+                getSupportActionBar().setDisplayOptions( ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_CUSTOM);
                 
             }
  
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
-                getSupportActionBar().setTitle(mTitle);
-                View view = layoutInflator.inflate(R.layout.view_drawer_open, null);
-                getSupportActionBar().setCustomView(view);
+                //getSupportActionBar().setTitle(mTitle);
+                
+                getSupportActionBar().setCustomView(viewOpenDrawer);
                 getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_CUSTOM );
                 
                 
@@ -152,7 +173,8 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
-        getSupportActionBar().setTitle(mTitle);
+        //getSupportActionBar().setTitle(mTitle);
+        tvDrawerTitle.setText(mTitle);
     }
  
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -161,5 +183,38 @@ public class MainActivity extends ActionBarActivity {
             selectItem(position);
         }
     }
- 
+
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, int position,
+			long id) {
+		String str = (String)parent.getAdapter().getItem(position);
+		
+		if(currentDomainSpinnerPosition != position){
+			currentDomainSpinnerPosition = position;
+			mDrawerLayout.closeDrawers();
+			selectItem(0);
+			if(position == 0){
+				strHostUrl = getString(R.string.hostCar);
+			}else if(position == 1){
+				strHostUrl = getString(R.string.hostParts);
+			}else if(position == 2){
+				strHostUrl = getString(R.string.hostBikes);
+			}else if(position == 3){
+				strHostUrl = getString(R.string.hostBoats);
+			}else if(position == 4){
+				strHostUrl = getString(R.string.hostTruck);
+			}else if(position == 5){
+				strHostUrl = getString(R.string.hostCarvans);
+			}else{
+				strHostUrl = getString(R.string.hostCar);
+			}
+			Toast.makeText(MainActivity.this, strHostUrl, Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> parent) {
+		// TODO Auto-generated method stub
+		
+	}
 }

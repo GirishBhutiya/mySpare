@@ -19,4 +19,18 @@
     	<item>Truck</item>
     	<item>Caravans</item>    
 	</string-array>
+	<string name="categorystr">Category</string>
+	<string name="makestr">Make</string>
+	<string-array name="categoryItem">
+	    <item>Category</item>
+	    <item>Dealer New</item>
+        <item>Dealer Used</item>
+        <item>Private Seller</item>
+	</string-array>
+	<string name="hostCar">http://www.mysparecar.com.au/</string>
+	<string name="hostParts">http://www.myspareparts.com.au/</string>
+	<string name="hostBikes">http://www.mysparebike.com.au/</string>
+	<string name="hostBoats">http://www.myspareboat.com.au/</string>
+	<string name="hostTruck">http://www.mysparetruck.com.au/</string>
+	<string name="hostCarvans">http://www.mysparecaravan.com.au/</string>
 </resources>
