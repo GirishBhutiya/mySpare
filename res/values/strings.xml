@@ -22,7 +22,6 @@
 	<string name="categorystr">Category</string>
 	<string name="makestr">Make</string>
 	<string-array name="categoryItem">
-	    <item>Category</item>
 	    <item>Dealer New</item>
         <item>Dealer Used</item>
         <item>Private Seller</item>
